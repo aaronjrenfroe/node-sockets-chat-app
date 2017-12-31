@@ -19,9 +19,25 @@ app.use(express.static(publicPath, {}))
 io.on('connection', (socket) => {
   console.log('new user connected: ');
   
+
+  socket.on('createEmail', (newEmail) => {
+    console.log('CreateEmail', newEmail);
+  })
   socket.on('disconnect', () => {
     console.log('Client Disconnected from Server')
   })
+
+  socket.on('createMessage', (data)=>{
+    console.log('createMessage', data);
+    
+  });
+
+  socket.emit('newMessage', {
+    from: 'John',
+    text:'Se you then',
+    createdAt:123123
+  });
+
 });
 
 // Lastestes

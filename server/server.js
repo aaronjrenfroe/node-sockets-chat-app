@@ -5,6 +5,8 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 // Local Imports
+const {msgGen} = require('./utils/message');
+
 // nil
 
 // Constants
@@ -19,25 +21,15 @@ app.use(express.static(publicPath, {}))
 io.on('connection', (socket) => {
   console.log('new user connected: ');
   
+  socket.emit('newMessage', msgGen('admin', 'Welcome to the Chat App'));
 
-  socket.on('createEmail', (newEmail) => {
-    console.log('CreateEmail', newEmail);
-  })
-  socket.on('disconnect', () => {
-    console.log('Client Disconnected from Server')
-  })
+  socket.broadcast.emit('newMessage', msgGen('admin', 'A new User has joined'));
 
   socket.on('createMessage', (message)=>{
     console.log('createMessage', message);
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createAt: (new Date()).getTime()
-    });
+    socket.broadcast.emit('newMessage', msgGen(message.from, message.text));
+
   });
-
-
-
 });
 
 // Lastestes

@@ -5,7 +5,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 // Local Imports
-const {msgGen} = require('./utils/message');
+const {msgGen, msgLocGen} = require('./utils/message');
 
 // nil
 
@@ -27,9 +27,15 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (message, callback)=>{
     console.log('createMessage', message);
-    callback('server got your message');
+    callback();
     socket.emit('newMessage', msgGen(message.from, message.text));
 
+  });
+
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', msgLocGen('Admin', coords));
+    console.log(coords);
+    
   });
 });
 

@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
   
   socket.emit('newMessage', msgGen('Admin', 'Welcome to the Chat App'));
 
-  socket.broadcast.emit('newMessage', msgGen('Admin', 'A new User has joined'));
+  socket.broadcast.emit('newMessage', msgGen('Admin', 'A new User has joined')); 
 
   socket.on('createMessage', (message, callback)=>{
     console.log('createMessage', message);

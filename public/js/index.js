@@ -1,3 +1,4 @@
+
 let socket = io();
         
 socket.on('connect', function () {
@@ -9,32 +10,30 @@ socket.on('disconnect', function () {
   console.log('Disconnected from Server')
 })
 
-socket.on('newEmail', function(data){
-  console.log('New Email');
-  console.log(data);
-
-});
-
+// MESSAGES Listeners
 socket.on('newMessage', (message) => {
-  console.log(message);
+  let formattedTime = moment(message.createdAt).format('h:mm a');
   
-  var li = jQuery('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  console.log(formattedTime);
+  
+  let li = jQuery('<li></li>');
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
   jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', (message) => {
-  console.log(message);
-  var li = jQuery('<li></li>');
-  var a = jQuery('<a target="_blank">My Location</a>');
+
+  let formattedTime = moment(message.createdAt).format('h:mm a');
+  let li = jQuery('<li></li>');
+  let a = jQuery('<a target="_blank">My Location</a>');
   
-  li.text(`${message.from}: `)
+  li.text(`${message.from} ${formattedTime}: `)
   a.attr('href', message.url);
   li.append(a);
   jQuery('#messages').append(li);
 });
 
-
+// MESSAGE Senders
 jQuery('#message-form').on('submit', (event) => {
   event.preventDefault();
   let element = jQuery('[name=message]');

@@ -27,16 +27,16 @@ io.on('connection', (socket) => {
     console.log('Client Disconnected from Server')
   })
 
-  socket.on('createMessage', (data)=>{
-    console.log('createMessage', data);
-    
+  socket.on('createMessage', (message)=>{
+    console.log('createMessage', message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createAt: (new Date()).getTime()
+    });
   });
 
-  socket.emit('newMessage', {
-    from: 'John',
-    text:'Se you then',
-    createdAt:123123
-  });
+
 
 });
 

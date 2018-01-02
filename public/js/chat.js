@@ -6,7 +6,8 @@ let socket = io();
 socket.on('connect', function () {
   
   let params = jQuery.deparam(window.location.search)
-
+  params.name = params.name.toLowerCase();
+  params.room = params.room.toLowerCase();
   let title = jQuery('#room-name');
   title.text(jQuery.deparam(window.location.search).room);
 

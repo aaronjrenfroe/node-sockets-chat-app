@@ -2,8 +2,5 @@ let isRealString = (str) => {
   return typeof str === 'string' && str.trim().length > 0;
 }
 
-let isUnique = (str) => {
-  return typeof str === 'string' && str.trim().length > 0;
-}
 
-module.exports = {isRealString, isUnique}
+module.exports = {isRealString}

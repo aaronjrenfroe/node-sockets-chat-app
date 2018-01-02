@@ -17,7 +17,7 @@ class Users {
   }
 
   addUser(id, name, room){
-    var user = {id, name, room};
+    var user = {id, name: name.toLowerCase(), room: room.toLowerCase()};
     this.users.push(user);
 
   }
@@ -39,9 +39,17 @@ class Users {
   }
 
   getUserList(room){
+    room = room.toLowerCase();
     let users = this.users.filter((user) => user.room === room );
     let names = users.map((user) => user.name);
     return names;
+  }
+
+  isUnique(name, room){
+    name = name.toLowerCase();
+    room = room.toLowerCase();
+    let users = this.users.filter((user) => user.room === room && user.name === name );
+    return users.length == 0;
   }
 }
 

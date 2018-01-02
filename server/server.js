@@ -8,7 +8,7 @@ const socketIO = require('socket.io');
 
 // Local Imports
 const {msgGen, msgLocGen} = require('./utils/message');
-const {isUnique, isRealString} = require('./utils/validation');
+const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
 
 
@@ -26,9 +26,14 @@ io.on('connection', (socket) => {
 
   socket.on('join', (params, callback) => {
 
-    if(!isRealString(params.name) || !isRealString(params.room)){
-      return callback('Name and Roomname are required');
-      
+    if(!isRealString(params.name) || !isRealString(params.room) || !users.isUnique(params.name, params.room)){
+      let errorMsg = "";
+      if(!isRealString(params.name) || !isRealString(params.room)){
+        errorMsg = 'Name and Roomname are required';
+      }else if(!users.isUnique(params.name, params.room)){
+        errorMsg = "The given username exists in the room " + params.room + ". Please try another name.";
+      }
+       return callback(errorMsg);
     }
     socket.join(params.room);
     users.removeUser(socket.id);
@@ -65,6 +70,10 @@ io.on('connection', (socket) => {
       io.to(user.room).emit('newMessage', msgGen('', user.name + " has left"));
     }
   });
+
+  socket.on('validateUserName', (params, callback) => {  
+    callback(users.isUnique(params.name, params.room));
+  })
 
 });
 

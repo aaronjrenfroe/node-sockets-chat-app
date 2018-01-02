@@ -3,7 +3,7 @@ let socket = io();
 
 
 
-socket.on('connect', function () {
+socket.on('connect', () => {
   
   let params = jQuery.deparam(window.location.search)
   params.name = params.name.toLowerCase();
@@ -21,7 +21,7 @@ socket.on('connect', function () {
   });
 });
 
-socket.on('disconnect', function () {
+socket.on('disconnect', () => {
   console.log('Disconnected from Server')
 })
 

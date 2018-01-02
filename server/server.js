@@ -77,8 +77,6 @@ io.on('connection', (socket) => {
 
 });
 
-
-
 // Lastestes
 server.listen(PORT, ()=> {
   console.log('Serving on port: ' + PORT);

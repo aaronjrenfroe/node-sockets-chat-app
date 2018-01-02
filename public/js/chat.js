@@ -13,17 +13,24 @@ let scrollToBottom = ()=>{
   let lastMsgHeight = newMessage.prev().innerHeight();
   // set a var for debugging
   let calc = clientHeight + scrollTop + newMsgHeight + lastMsgHeight + 100;
-  console.log(calc, ' >= ',scrollHeight);
   
   if (calc >= scrollHeight){
-    console.log('Should Scroll');
+    
     messages.scrollTop(scrollHeight);
   }
 };
-        
+   
 socket.on('connect', function () {
-  console.log('Connected to server');
-
+  
+  let params = jQuery.deparam(window.location.search)
+  socket.emit('join', params, (error) => {
+    if(error){
+      alert(error);
+      window.location.href = '/';
+    }else{
+      console.log("No Error");
+    }
+  });
 });
 
 socket.on('disconnect', function () {
@@ -33,7 +40,6 @@ socket.on('disconnect', function () {
 // MESSAGES Listeners
 socket.on('newMessage', (message) => {
   let formattedTime = moment(message.createdAt).format('h:mm a');
-  console.log(formattedTime);
 
   let template = jQuery('#message-template').html();
   let html = Mustache.render(template,{
@@ -48,7 +54,6 @@ socket.on('newMessage', (message) => {
 
 socket.on('newLocationMessage', (message) => {
   let formattedTime = moment(message.createdAt).format('h:mm a');
-  console.log(formattedTime);
 
   let template = jQuery('#location-message-template').html();
   let html = Mustache.render(template,{
@@ -71,7 +76,7 @@ jQuery('#message-form').on('submit', (event) => {
     from: 'User',
     text: element.val()
   }, () => {
-    console.log("Ack");
+    // Clearing input field
     element.val('');
   });
 });
@@ -80,7 +85,7 @@ jQuery('#message-form').on('submit', (event) => {
 let locationbutton = jQuery('#sendLocation');
 
 locationbutton.on('click', () => {
-  console.log('Button was pressed');
+  // Submitting form
   if(!navigator.geolocation){
     return alert('Geolaction not supported by your browser');
   }
@@ -89,7 +94,6 @@ locationbutton.on('click', () => {
   locationbutton.attr('disabled', 'disabled');
 
   navigator.geolocation.getCurrentPosition((pos) =>{
-    console.log(pos);
     locationbutton.text('Sending Location');
     socket.emit('createLocationMessage', {
       lat: pos.coords.latitude,

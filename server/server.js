@@ -6,6 +6,7 @@ const socketIO = require('socket.io');
 
 // Local Imports
 const {msgGen, msgLocGen} = require('./utils/message');
+const {isUnique, isRealString} = require('./utils/validation');
 
 // nil
 
@@ -22,8 +23,14 @@ io.on('connection', (socket) => {
   console.log('new user connected: ');
   
   socket.emit('newMessage', msgGen('Admin', 'Welcome to the Chat App'));
-
   socket.broadcast.emit('newMessage', msgGen('Admin', 'A new User has joined')); 
+
+  socket.on('join', (params, callback) => {
+    if(!isRealString(params.name) || !isRealString(params.room)){
+      callback('Name and Roomname are required');
+    }
+    callback();
+  });
 
   socket.on('createMessage', (message, callback)=>{
     console.log('createMessage', message);

@@ -1,28 +1,15 @@
 
 let socket = io();
 
-let scrollToBottom = ()=>{
-  // Selectors
-  let messages = jQuery('#messages')
-  let newMessage = messages.children('li:last-child');
-  // Heights
-  let clientHeight = messages.prop('clientHeight');
-  let scrollTop = messages.prop('scrollTop');
-  let scrollHeight = messages.prop('scrollHeight');
-  let newMsgHeight = newMessage.innerHeight();
-  let lastMsgHeight = newMessage.prev().innerHeight();
-  // set a var for debugging
-  let calc = clientHeight + scrollTop + newMsgHeight + lastMsgHeight + 100;
-  
-  if (calc >= scrollHeight){
-    
-    messages.scrollTop(scrollHeight);
-  }
-};
+
 
 socket.on('connect', function () {
   
   let params = jQuery.deparam(window.location.search)
+
+  let title = jQuery('#room-name');
+  title.text(jQuery.deparam(window.location.search).room);
+
   socket.emit('join', params, (error) => {
     if(error){
       alert(error);
@@ -119,3 +106,27 @@ locationbutton.on('click', () => {
   });
 
 });
+
+let scrollToBottom = ()=>{
+  // Selectors
+  let messages = jQuery('#messages');
+  let newMessage = messages.children('li:last-child');
+  // Heights
+  let clientHeight = messages.prop('clientHeight');
+  let scrollTop = messages.prop('scrollTop');
+  let scrollHeight = messages.prop('scrollHeight');
+  let newMsgHeight = newMessage.innerHeight();
+  let lastMsgHeight = newMessage.prev().innerHeight();
+  // set a var for debugging
+  let calc = clientHeight + scrollTop + newMsgHeight + lastMsgHeight + 100;
+  
+  if (calc >= scrollHeight){
+    
+    messages.scrollTop(scrollHeight);
+  }
+};
+
+let shareLink = jQuery('#share');
+let params = jQuery.deparam(window.location.search);
+let url = window.location.origin + '/?room=' + params.room;
+shareLink.text(url);

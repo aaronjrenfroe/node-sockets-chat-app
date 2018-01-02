@@ -1,5 +1,4 @@
 
-
  jQuery('#join-form').on('submit', (event) => {
   event.preventDefault();
   let name = jQuery('[name=name]').val();
@@ -17,3 +16,11 @@
     alert('Name and Room Name are required')
   }
  });
+
+ // Room Invites
+ let params = jQuery.deparam(window.location.search);
+
+ if(params.room){
+  let room = jQuery('[name=room]');
+  room.val(params.room);
+ }

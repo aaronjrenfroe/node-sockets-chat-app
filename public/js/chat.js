@@ -58,10 +58,11 @@ socket.on('newLocationMessage', (message) => {
   let template = jQuery('#location-message-template').html();
   let html = Mustache.render(template,{
     from: message.from,
-    text: message.url,
+    url: message.url,
     createdAt: formattedTime
   });
-
+  console.log(message);
+  
   jQuery('#messages').append(html);
   scrollToBottom();
 

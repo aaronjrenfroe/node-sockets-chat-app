@@ -60,6 +60,8 @@ io.on('connection', (socket) => {
     let user = users.getUser(socket.id);
     if(user){
       io.to(user.room).emit('newLocationMessage', msgLocGen(user.name, coords));
+      console.log(msgLocGen(user.name, coords));
+      
     }
   });
 

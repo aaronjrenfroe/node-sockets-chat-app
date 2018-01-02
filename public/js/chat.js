@@ -19,7 +19,7 @@ let scrollToBottom = ()=>{
     messages.scrollTop(scrollHeight);
   }
 };
-   
+
 socket.on('connect', function () {
   
   let params = jQuery.deparam(window.location.search)
@@ -37,8 +37,20 @@ socket.on('disconnect', function () {
   console.log('Disconnected from Server')
 })
 
+socket.on('updateUserList', (usersList) => {
+  console.log(usersList);
+  var list = jQuery('<ul></ul>');
+  usersList.forEach((user) => {
+    list.append(jQuery('<li></li>').text(user));
+  })
+  jQuery('#users').html(list);
+
+});
+
 // MESSAGES Listeners
 socket.on('newMessage', (message) => {
+  console.log(message);
+
   let formattedTime = moment(message.createdAt).format('h:mm a');
 
   let template = jQuery('#message-template').html();
@@ -48,7 +60,7 @@ socket.on('newMessage', (message) => {
     createdAt: formattedTime
   });
 
-  jQuery('#messages').append(html);
+  jQuery('#messages').append(html); 
   scrollToBottom();
 });
 
@@ -71,16 +83,15 @@ socket.on('newLocationMessage', (message) => {
 jQuery('#message-form').on('submit', (event) => {
   event.preventDefault();
   let element = jQuery('[name=message]');
-
-  socket.emit('createMessage', {
-    from: 'User',
-    text: element.val()
-  }, () => {
-    // Clearing input field
-    element.val('');
-  });
+ 
+    socket.emit('createMessage', {
+      text: element.val()
+    }, () => {
+      // Clearing input field
+      element.val('');
+    });
+  
 });
-
 
 let locationbutton = jQuery('#sendLocation');
 
@@ -100,7 +111,7 @@ locationbutton.on('click', () => {
       long: pos.coords.longitude
     });
     locationbutton.removeAttr('disabled');
-    locationbutton.text(originalButtonText);
+    locationbutton.text(originalButtonText); 
   }, (error) => {
     locationbutton.removeAttr('disabled');
     locationbutton.text(originalButtonText);

@@ -17,11 +17,11 @@ if( typeof name === 'string'
     }else{
       alert('There is another user in that room with the same name. try another name');
     }
-  })
+  });
   
 
 }else{
-  alert('Name and Room Name are required')
+  alert('Name and Room Name are required');
 }
 });
 

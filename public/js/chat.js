@@ -132,3 +132,14 @@ let shareLink = jQuery('#share');
 let params = jQuery.deparam(window.location.search);
 let url = window.location.origin + '/?room=' + params.room;
 shareLink.text(url);
+
+let copyToClipboard = (event) => {
+  let $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($('#share').text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+
+let shareBtn = $('#share-button');
+shareBtn.on('click',copyToClipboard);

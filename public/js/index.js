@@ -2,7 +2,7 @@ let socket = io();
 
 socket.emit('get-room-list', null,(roomList) => { 
   jQuery.each(roomList, (_, value) => {
-    jQuery('#selectBox')
+    jQuery('[name=selectBox]')
         .append($("<option></option>")
         .attr("value",value)
         .text(value));

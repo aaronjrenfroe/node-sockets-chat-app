@@ -22,9 +22,15 @@ let io = socketIO(server);
 let users = new Users();
 
 app.use(express.static(publicPath, {}));
+
 io.on('connection', (socket) => {
 
+  socket.on('get-room-list', (_, callback) => {
+    callback(users.getRoomList());
+  });
+
   socket.on('join', (params, callback) => {
+
 
     if(!isRealString(params.name) || !isRealString(params.room) || !users.isUnique(params.name, params.room)){
       let errorMsg = "";
@@ -42,6 +48,7 @@ io.on('connection', (socket) => {
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
 
     socket.emit('newMessage', msgGen('Admin', 'Welcome to the Chat App'));
+    
     socket.broadcast.to(params.room).emit('newMessage', msgGen('Admin',  params.name + ' has joined')); 
     callback();
   });

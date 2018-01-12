@@ -1,9 +1,26 @@
 let socket = io();
 
+socket.emit('get-room-list', null,(roomList) => { 
+  jQuery.each(roomList, (_, value) => {
+    jQuery('#selectBox')
+        .append($("<option></option>")
+        .attr("value",value)
+        .text(value));
+  });
+});
+
 jQuery('#join-form').on('submit', (event) => {
 event.preventDefault();
 let name = jQuery('[name=name]').val().toLowerCase();
-let room = jQuery('[name=room]').val().toLowerCase();
+let selectedRoom = jQuery('[name=selectBox]').val().toLowerCase();
+let room;
+if(selectedRoom == 'default'){
+  room = jQuery('[name=room]').val().toLowerCase();
+}else{
+  room = selectedRoom;
+}
+
+
 if( typeof name === 'string' 
 && typeof room === 'string' 
 && room.trim().length > 0 
@@ -25,6 +42,8 @@ if( typeof name === 'string'
 }
 });
 
+
+
 // Room Invites
 let params = jQuery.deparam(window.location.search);
 
@@ -32,3 +51,5 @@ if(params.room){
 let room = jQuery('[name=room]');
 room.val(params.room);
 }
+
+
